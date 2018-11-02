@@ -39,15 +39,21 @@ $(document).ready(function() {
     getPartijen(true)
 
     $('#nieuweParing').click(function(){
-      knex('tornooien').select('id').where('active',1).first().then(function(id){
-        Tornooi.create(id.id, knex).then(function(tornooi){
-          let spelerArray = SJCEngine.sortSpelers(selection.getValue(true), tornooi)
-          SJCEngine.executeParing(spelerArray, tornooi)
-          Lobibox.notify('success', {
-            msg: 'Paring uitgevoerd.',
-            sound: 'sound7'  });
+      if(selection.getValue(true).length > 0){
+        knex('tornooien').select('id').where('active',1).first().then(function(id){
+          Tornooi.create(id.id, knex).then(function(tornooi){
+            let spelerArray = SJCEngine.sortSpelers(selection.getValue(true), tornooi)
+            SJCEngine.executeParing(spelerArray, tornooi)
+            Lobibox.notify('success', {
+              msg: 'Paring uitgevoerd.',
+              sound: 'sound7'  });
+          })
         })
-      })
+      } else {
+        Lobibox.notify('error', {
+          msg: 'Geen beschikbare spelers geselecteerd.',
+          sound: 'sound5'  });
+      }
     })
 
     getSelect()
