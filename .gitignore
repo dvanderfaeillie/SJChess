@@ -2,3 +2,4 @@
 node_modules/
 release_builds/
 src/database.db
+!src/node_modules/
