@@ -23,13 +23,16 @@ $(document).ready(function() {
     continueDelayOnInactiveTab: false
   });
 
-  $('#adminx-shared').load('adminx-shared.html', function(){
-    $('#menuSpelers').addClass('active');
-
-    getSpelers()
-
-    $('#addSpeler').click(function(){
-      addSpelerObj(createBootBoxSpeler)
+  $('#adminx-shared').load('adminx-shared.html', function () {
+    $('#menuSpelers').addClass('active')
+    $('.sidebar-toggle').click(function(){
+      $('.adminx-sidebar')[0].classList.toggle("in")
     })
+  })
+
+  getSpelers()
+
+  $('#addSpeler').click(function(){
+    addSpelerObj(createBootBoxSpeler)
   })
 })

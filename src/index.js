@@ -23,7 +23,12 @@ $(document).ready(function () {
   });
 
   $('#adminx-shared').load('adminx-shared.html', function () {
-    $('#menuIndex').addClass('active') })
+    $('#menuIndex').addClass('active')
+    $('.sidebar-toggle').click(function(){
+      $('.adminx-sidebar')[0].classList.toggle("in")
+    })
+  })
+
     const tornooiId = new Choices('.js-choice', {
       searchEnabled: false,
       itemSelectText: ''

@@ -22,58 +22,62 @@ $(document).ready(function() {
     continueDelayOnInactiveTab: false
   });
 
-  $('#adminx-shared').load('adminx-shared.html', function(){
-    $('#menuPartijen').addClass('active');
-    const selection = new Choices('.js-choice-remove', {
-      searchEnabled: true,
-      itemSelectText: '',
-      noChoicesText: 'Geen verdere mogelijkheden',
-      removeItemButton: true
+  $('#adminx-shared').load('adminx-shared.html', function () {
+    $('#menuPartijen').addClass('active')
+    $('.sidebar-toggle').click(function(){
+      $('.adminx-sidebar')[0].classList.toggle("in")
     })
+  })
 
-    $('#addSpeler').click(function(){
-      createBootBoxSpeler(selection)
-    })
+  const selection = new Choices('.js-choice-remove', {
+    searchEnabled: true,
+    itemSelectText: '',
+    noChoicesText: 'Geen verdere mogelijkheden',
+    removeItemButton: true
+  })
 
-    getPartijen()
-    getPartijen(true)
+  $('#addSpeler').click(function(){
+    createBootBoxSpeler(selection)
+  })
 
-    $('#nieuweParing').click(function(){
-      if(selection.getValue(true).length > 0){
-        knex('tornooien').select('id').where('active',1).first().then(function(id){
-          Tornooi.create(id.id, knex).then(function(tornooi){
-            let spelerArray = SJCEngine.sortSpelers(selection.getValue(true), tornooi)
-            SJCEngine.executeParing(spelerArray, tornooi)
-            Lobibox.notify('success', {
-              msg: 'Paring uitgevoerd.',
-              sound: 'sound7'  });
-          })
+  getPartijen()
+  getPartijen(true)
+
+  $('#nieuweParing').click(function(){
+    if(selection.getValue(true).length > 0){
+      knex('tornooien').select('id').where('active',1).first().then(function(id){
+        Tornooi.create(id.id, knex).then(function(tornooi){
+          let spelerArray = SJCEngine.sortSpelers(selection.getValue(true), tornooi)
+          SJCEngine.executeParing(spelerArray, tornooi)
+          Lobibox.notify('success', {
+            msg: 'Paring uitgevoerd.',
+            sound: 'sound7'  });
         })
-      } else {
-        Lobibox.notify('error', {
-          msg: 'Geen beschikbare spelers geselecteerd.',
-          sound: 'sound5'  });
-      }
-    })
-
-    getSelect()
-    function getSelect(){
-      var choicesArray = []
-      let qry = knex.select('spelers.id','spelers.naam','spelers.voornaam')
-                    .from('spelers')
-                    .join('tornooien', 'spelers.tornooiId', 'tornooien.id')
-                    .where('tornooien.active',1)
-                    .orderBy('spelers.naam','asc')
-      qry.then(function(result){
-        for(let i = 0; i < result.length ; i++){
-          choicesArray.push({
-            value: result[i].id,
-            label: result[i].voornaam+' '+result[i].naam,
-            selected: $.inArray(result[i].id,selection.getValue(true)) !== -1
-          })
-        }
-        selection.clearStore().setChoices(choicesArray, 'value', 'label', true)
       })
+    } else {
+      Lobibox.notify('error', {
+        msg: 'Geen beschikbare spelers geselecteerd.',
+        sound: 'sound5'  });
     }
   })
+
+  getSelect()
+  function getSelect(){
+    var choicesArray = []
+    let qry = knex.select('spelers.id','spelers.naam','spelers.voornaam')
+                  .from('spelers')
+                  .join('tornooien', 'spelers.tornooiId', 'tornooien.id')
+                  .where('tornooien.active',1)
+                  .orderBy('spelers.naam','asc')
+    qry.then(function(result){
+      for(let i = 0; i < result.length ; i++){
+        choicesArray.push({
+          value: result[i].id,
+          label: result[i].voornaam+' '+result[i].naam,
+          selected: $.inArray(result[i].id,selection.getValue(true)) !== -1
+        })
+      }
+      selection.clearStore().setChoices(choicesArray, 'value', 'label', true)
+    })
+  }
 })
