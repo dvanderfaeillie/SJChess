@@ -1,0 +1,35 @@
+{
+  "name": "sjchess",
+  "version": "0.1.0",
+  "description": "SJC chess tournament manager",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild -f -w sqlite3",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release_builds",
+    "package-win": "electron-packager . sjchess --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release_builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Shopping list\"",
+    "package-linux": "electron-packager . sjchess --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release_builds"
+  },
+  "author": "Dieter Vanderfaeillie",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.4.2",
+    "adminx": "^1.0.0-alpha.6",
+    "awesome-bootstrap-checkbox": "^1.0.1",
+    "bootbox": "^4.4.0",
+    "choices.js": "^4.0.4",
+    "electron": "^3.0.6",
+    "flatpickr": "^4.5.2",
+    "jquery": "^3.3.1",
+    "knex": "^0.15.2",
+    "lobibox": "^1.2.7",
+    "moment": "^2.22.2",
+    "popper": "^1.0.1",
+    "popper.js": "^1.14.4",
+    "sqlite3": "^4.0.3"
+  },
+  "devDependencies": {
+    "electron-packager": "^12.2.0",
+    "electron-rebuild": "^1.8.2"
+  }
+}
