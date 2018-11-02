@@ -6,8 +6,9 @@ const knex = require("knex")({
   useNullAsDefault: false
 })
 const moment = require('moment')
-const { dialog } = require('electron').remote
-//dialog.showSaveDialog()
+const { remote } = require('electron')
+const fs = require('fs')
+
 
 $(document).ready(function() {
   Lobibox.notify.DEFAULTS = $.extend({}, Lobibox.notify.DEFAULTS, {
@@ -39,9 +40,21 @@ $(document).ready(function() {
       })
 
     $('#exportRangschikking').click(function(){
-      Lobibox.notify('success', {
-        msg: 'Speler toegevoegd.',
-        sound: 'sound7'  });
+      knex('tornooien').select('id')
+        .where('active',1)
+        .first()
+        .then(function(id){
+          getRangschikkingExport(id.id).then(function(content){
+            let path = remote.dialog.showSaveDialog(remote.getCurrentWindow(), {title: 'Save file'})
+            if (typeof path !== 'undefined') {
+              fs.writeFile(path, content, function(err) {
+                if(err) {
+                    return console.log(err)
+                }
+              })
+            } // end if
+          }) // end then
+        })
     })
   })
 })
