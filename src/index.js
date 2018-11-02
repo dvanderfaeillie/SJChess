@@ -8,7 +8,7 @@ const knex = require("knex")({
 const moment = require('moment')
 const bootstrap = require('bootstrap')
 const bootbox = require('bootbox')
-
+const $ = require('jquery')
 
 $(document).ready(function () {
   Lobibox.notify.DEFAULTS = $.extend({}, Lobibox.notify.DEFAULTS, {

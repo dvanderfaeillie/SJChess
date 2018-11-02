@@ -6,6 +6,7 @@ const knex = require("knex")({
   useNullAsDefault: false
 })
 const moment = require('moment')
+const $ = require('jquery')
 const { remote } = require('electron')
 const fs = require('fs')
 
