@@ -1,14 +1,15 @@
 {
   "name": "sjchess",
+  "productName": "SJChess tournament manager",
   "version": "0.1.0",
-  "description": "SJC chess tournament manager",
+  "description": "SJCchess tournament manager",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "rebuild": "electron-rebuild -f -w sqlite3",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release_builds",
-    "package-win": "electron-packager . sjchess --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release_builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Shopping list\"",
-    "package-linux": "electron-packager . sjchess --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release_builds"
+    "package-win": "electron-packager . sjchess --overwrite --asar --extraResource=src/database.db --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release_builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"SJChess\"",
+    "package-linux": "electron-packager . sjchess --overwrite --platform=linux --arch=x64 --asar --extraResource=src/database.db --icon=assets/icons/png/icon1024x1024.png --prune=true --out=release_builds"
   },
   "author": "Dieter Vanderfaeillie",
   "license": "GPL-3.0",
@@ -18,7 +19,6 @@
     "awesome-bootstrap-checkbox": "^1.0.1",
     "bootbox": "^4.4.0",
     "choices.js": "^4.0.4",
-    "electron": "^3.0.6",
     "flatpickr": "^4.5.2",
     "jquery": "^3.3.1",
     "knex": "^0.15.2",
@@ -29,6 +29,7 @@
     "sqlite3": "^4.0.3"
   },
   "devDependencies": {
+    "electron": "^3.0.6",
     "electron-packager": "^12.2.0",
     "electron-rebuild": "^1.8.2"
   }
