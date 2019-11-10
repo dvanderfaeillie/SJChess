@@ -8,7 +8,8 @@ function getPartijen(todayFlag){
                         'witspeler.voornaam as witSpelerVoornaam',
                         'zwartspeler.naam as zwartSpelerNaam',
                         'zwartspeler.voornaam as zwartSpelerVoornaam',
-                        'partijen.resultaat')
+                        'partijen.resultaat',
+                        'partijen.ts')
                 .from('partijen')
                 .join('spelers as witspeler', 'witspeler.id', 'partijen.witSpelerId')
                 .leftJoin('spelers as zwartspeler', 'zwartspeler.id', 'partijen.zwartSpelerId')
@@ -17,10 +18,12 @@ function getPartijen(todayFlag){
   if(todayFlag){
     qry.where('partijen.datum', moment().format('YYYY-MM-DD')).andWhere('partijen.resultaat',0)
   } else {
-    qry.where('partijen.datum', '!=', moment().format('YYYY-MM-DD')).orWhere('partijen.resultaat','!=',0)
+    qry.where(function() {
+      this.where('partijen.datum', '!=', moment().format('YYYY-MM-DD')).orWhere('partijen.resultaat','!=',0)
+    })
   }
 
-  qry.orderBy('witSpelerNaam','asc').then(function(result){
+  qry.orderBy('partijen.ts','desc').then(function(result){
     let str = ''
     result.forEach(function(partij){
       str += '<tr>'
@@ -32,9 +35,19 @@ function getPartijen(todayFlag){
         str += 'bye'
       }
       str += '</td>'
-      str += '<td class=\'text-center\'>'
-      str += formatResultaat(partij.resultaat)
-      str += '</td>'
+      if(partij.resultaat === 0){
+        str += '<td class=\'text-center\'>'
+        str += '<div class=\'btn-group btn-group-sm\' role=\'group\'>'
+        str += '<button value=\''+partij.id+'\' result=\'1\' class=\'btn btn-sm btn-secondary resultBtn\' style=\'padding-top: 0rem; padding-bottom:0rem;\'>Wit wint</button>'
+        str += '<button value=\''+partij.id+'\' result=\'2\' class=\'btn btn-sm btn-secondary resultBtn\' style=\'padding-top: 0rem; padding-bottom:0rem;\'>Remise</button>'
+        str += '<button value=\''+partij.id+'\' result=\'3\' class=\'btn btn-sm btn-secondary resultBtn\' style=\'padding-top: 0rem; padding-bottom:0rem;\'>Zwart wint</button>'
+        str += '</div>'
+        str += '</td>'
+      } else {
+        str += '<td class=\'text-center\'>'
+        str += formatResultaat(partij.resultaat)
+        str += '</td>'
+      }
       str += '<td>'
       str += '<a href=\'#\' value=\''+partij.id+'\' class=\'text-info\'><span class=\'fas fa-fw fa-edit\'></span></a>'
       str += '<a href=\'#\' value=\''+partij.id+'\' class=\'text-danger\'><span class=\'fas fa-fw fa-times\'></span></a>'
@@ -52,8 +65,23 @@ function getPartijen(todayFlag){
 } // end function
 
 function bindTableButtons(){
+  $('.resultBtn').off('click').on('click',function(e){
+    let partijId = $(this).attr('value')
+    let resultaat = $(this).attr('result')
+
+    let qry = knex('partijen').where('id',partijId)
+          .update('resultaat',resultaat)
+    qry.then(function(){
+      getPartijen()
+      getPartijen(true)
+      Lobibox.notify('warning', {
+        msg: 'Partij gewijzigd.',
+        sound: 'sound6'  })
+    })
+  })
+
   $('a[value]').off('click').on('click',function(e){
-    let id = $(this).attr('value');
+    let id = $(this).attr('value')
 
     if($(this).hasClass('text-danger')){
       bootbox.confirm({
