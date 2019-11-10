@@ -1,7 +1,8 @@
+const path = require('path')
 const knex = require("knex")({
   client: 'sqlite3',
   connection: {
-    filename: './src/database.db'
+    filename: path.join(__dirname, '/database.db').replace('/app.asar/src', '')
   },
   useNullAsDefault: false
 })

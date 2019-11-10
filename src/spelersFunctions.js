@@ -12,6 +12,9 @@ function getSpelers(){
       let speler = result[i]
       str += '<tr>'
       str += '<td>'
+      str += i+1
+      str += '</td>'
+      str += '<td>'
       str += '<span class=\'fa fa-fw '
       str += (speler.geslacht == 'm') ? 'fa-male text-primary' : 'fa-female text-danger'
       str += '\'></span> '
