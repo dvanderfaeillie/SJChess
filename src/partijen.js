@@ -1,7 +1,8 @@
+const path = require('path')
 const knex = require("knex")({
   client: 'sqlite3',
   connection: {
-    filename: './src/database.db'
+    filename: path.join(__dirname, '/database.db').replace('/app.asar/src', '')
   },
   useNullAsDefault: false
 })
@@ -29,11 +30,19 @@ $(document).ready(function() {
     })
   })
 
-  const selection = new Choices('.js-choice-remove', {
+  const element = document.getElementById('selectSpelers');
+  const selection = new Choices(element, {
     searchEnabled: true,
     itemSelectText: '',
     noChoicesText: 'Geen verdere mogelijkheden',
     removeItemButton: true
+  })
+
+  element.addEventListener('addItem',function(e){
+    $('#aantalSpelers').html('('+element.length+')')
+  })
+  element.addEventListener('removeItem',function(e){
+    $('#aantalSpelers').html('('+element.length+')')
   })
 
   $('#addSpeler').click(function(){

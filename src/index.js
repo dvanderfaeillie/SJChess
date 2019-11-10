@@ -1,10 +1,13 @@
+const path = require('path')
 const knex = require("knex")({
   client: 'sqlite3',
   connection: {
-    filename: './src/database.db'
+    filename: path.join(__dirname, '/database.db').replace('/app.asar/src', '')
   },
-  useNullAsDefault: false
+  useNullAsDefault: false,
+  debug: true
 })
+
 const moment = require('moment')
 const bootstrap = require('bootstrap')
 const bootbox = require('bootbox')
