@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, Menu, Dialog} = require("electron")
 const path = require('path')
 
-//process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'production'
 
 app.on("ready", () => {
 	let mainWindow = new BrowserWindow({
@@ -17,6 +17,8 @@ app.on("ready", () => {
 
 	if(process.env.NODE_ENV === 'production'){
 		mainWindow.setMenu(null);
+	} else {
+		mainWindow.openDevTools()
 	}
 
 	//ipcMain.on("mainWindowLoaded", function () {
