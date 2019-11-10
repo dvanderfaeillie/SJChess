@@ -136,11 +136,11 @@ class SJCEngine {
   static sortSpelers(beschikbareSpelers, tornooi){
     function compare(a, b) {
       let comparison = 0
-      if (a.sortField > b.sortField) {
+      if (a.score > b.score) {
         comparison = -1
-      } else if (a.sortField < b.sortField) {
+      } else if (a.score < b.score) {
         comparison = 1
-      } else {
+      } else { // if sortField is equal
         if(a.aantal < b.aantal){
           comparison = -1
         } else if (a.aantal > b.aantal) {
@@ -153,13 +153,16 @@ class SJCEngine {
     /* Sorting the available players on their score */
     let spelerArray = []
     beschikbareSpelers.forEach(function(spelerId){
-      spelerArray.push({
-        id: spelerId,
-        score: tornooi.getScore(spelerId),
-        aantal: tornooi.getAantalPartijen(spelerId),
-        aantalWit: tornooi.getAantalWitPartijen(spelerId),
-        sortField: tornooi.getAantalPartijen(spelerId) !== 0 ? tornooi.getScore(spelerId)/tornooi.getAantalPartijen(spelerId) : 0
-      })
+      //flag = true
+      //if(flag){
+        spelerArray.push({
+          id: spelerId,
+          score: tornooi.getScore(spelerId),
+          aantal: tornooi.getAantalPartijen(spelerId),
+          aantalWit: tornooi.getAantalWitPartijen(spelerId),
+          sortField: tornooi.getAantalPartijen(spelerId) !== 0 ? tornooi.getScore(spelerId)/tornooi.getAantalPartijen(spelerId) : 0
+        })
+      //}
     })
     spelerArray.sort(compare)
 
