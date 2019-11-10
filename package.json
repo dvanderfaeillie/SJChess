@@ -21,7 +21,7 @@
     "choices.js": "^4.0.4",
     "flatpickr": "^4.5.2",
     "jquery": "^3.3.1",
-    "knex": "^0.15.2",
+    "knex": "^0.19.5",
     "lobibox": "^1.2.7",
     "moment": "^2.22.2",
     "popper": "^1.0.1",
