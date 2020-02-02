@@ -12,7 +12,7 @@ app.on('ready', () => {
 			const sqlite3 = require('sqlite3')
 			var db = new sqlite3.Database(file)
 			db.serialize(function() {
-				db.run('CREATE TABLE partijen( id INTEGER PRIMARY KEY AUTOINCREMENT, whitePlayerId INTEGER, blackPlayerId INTEGER, result INTERGER DEFAULT 0, date DATE, ts DATETIME DEFAULT CURRENT_TIMESTAMP)')
+				db.run('CREATE TABLE games( id INTEGER PRIMARY KEY AUTOINCREMENT, whitePlayerId INTEGER, blackPlayerId INTEGER, result INTERGER DEFAULT 0, date DATE, ts DATETIME DEFAULT CURRENT_TIMESTAMP)')
 				db.run('CREATE TABLE players( id INTEGER PRIMARY KEY AUTOINCREMENT, surname VARCHAR(128), name VARCHAR(128), sex CHAR, tournamentId INT)')
 				db.run('CREATE TABLE tournaments( id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR (128), date DATE, ts DATETIME DEFAULT CURRENT_TIMESTAMP , active BOOLEAN DEFAULT 1)')
 			})
