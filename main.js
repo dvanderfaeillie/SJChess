@@ -8,7 +8,7 @@ const {
 const path = require('path')
 const fs = require('fs')
 
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'production' //production or development
 
 app.on('ready', () => {
   // Initializing the database file
@@ -38,7 +38,7 @@ app.on('ready', () => {
     minWidth: 550,
     minHeight: 450,
     show: false,
-    icon: path.join(__dirname, 'assets/icons/png/icon1024x1024.png'),
+    icon: path.join(__dirname, 'build/icon.png'),
     webPreferences: {
       nodeIntegration: true
     }
