@@ -93,17 +93,31 @@ $(document).ready(function () {
         callback: function(result){
           if(result){
             let id = $('select').val()
-            knex('tournaments').where('id', id).del().then(function(){
-              knex('tournaments').orderBy('date','desc').limit(1).pluck('id').then(function(r){
-                id = r[0]
-                knex('tournaments').where('id','=',id).update({'active': true}).then(function(){
-                  getSelect()
-                  Lobibox.notify('error', {
-                    msg: 'Tornooi werd verwijderd.',
-                    sound: 'sound3'  });
+
+            //removing games
+            knex('games').whereIn('whitePlayerId', function(){
+              this.select('id').from('players').where('tournamentId',id)
+            }).orWhereIn('blackPlayerId',function(){
+              this.select('id').from('players').where('tournamentId',id)
+            }).del().then(function(){
+              //removing players
+              knex('players').where('tournamentId',id).del().then(function(){
+                knex('tournaments').where('id', id).del().then(function(){
+                  // Setting new default tournament
+                  knex('tournaments').orderBy('date','desc').limit(1).pluck('id').then(function(r){
+                    id = r[0]
+                    knex('tournaments').where('id','=',id).update({'active': true}).then(function(){
+                      getSelect()
+                      Lobibox.notify('error', {
+                        msg: 'Tornooi werd verwijderd.',
+                        sound: 'sound3'  });
+                    })
+                  })
                 })
               })
             })
+
+
           }
         }
       })
