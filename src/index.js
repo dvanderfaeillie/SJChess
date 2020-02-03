@@ -1,4 +1,4 @@
-const knex = require("knex")({
+const knex = require('knex')({
   client: 'sqlite3',
   connection: {
     filename: './src/database.db'
