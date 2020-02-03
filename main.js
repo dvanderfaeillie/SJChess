@@ -4,15 +4,18 @@ const {
   ipcMain,
   Menu,
   Dialog
-} = require("electron")
+} = require('electron')
 const path = require('path')
+const fs = require('fs')
 
 process.env.NODE_ENV = 'development'
 
 app.on('ready', () => {
   // Initializing the database file
-  const fs = require('fs')
-  const file = './src/database.db'
+  global.sharedLocation = {
+		userDataPath : app.getPath('userData')
+	}
+	const file = path.join(app.getPath('userData'),'sjchess.db')
   try {
     if (!fs.existsSync(file)) {
       const sqlite3 = require('sqlite3')

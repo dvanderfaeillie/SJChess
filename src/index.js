@@ -1,10 +1,11 @@
+const path = require('path')
 const knex = require('knex')({
   client: 'sqlite3',
   connection: {
-    filename: './src/database.db'
+    filename: path.join(require('electron').remote.getGlobal('sharedLocation').userDataPath,'sjchess.db')
   },
   useNullAsDefault: false,
-  debug: true
+  debug: false
 })
 
 const moment = require('moment')

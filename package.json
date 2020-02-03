@@ -3,34 +3,42 @@
   "productName": "SJChess tournament manager",
   "version": "0.1.0",
   "description": "SJCchess tournament manager",
+  "author": "Dieter Vanderfaeillie",
+  "license": "GPL-3.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "rebuild": "electron-rebuild -f -w sqlite3",
-    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release_builds",
-    "package-win": "electron-packager . sjchess --overwrite --asar --extraResource=src/database.db --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release_builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"SJChess\"",
-    "package-linux": "electron-packager . sjchess --overwrite --platform=linux --arch=x64 --asar --extraResource=src/database.db --icon=assets/icons/png/icon1024x1024.png --prune=true --out=release_builds"
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Dieter Vanderfaeillie",
-  "license": "GPL-3.0",
+  "build": {
+    "appId": "com.sjchess.app",
+    "productName": "SJChess",
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.4.2",
+    "@fortawesome/fontawesome-free": "^5.12.0",
     "adminx": "^1.0.0-alpha.6",
     "awesome-bootstrap-checkbox": "^1.0.1",
     "bootbox": "^4.4.0",
     "choices.js": "^4.0.4",
     "flatpickr": "^4.5.2",
     "jquery": "^3.3.1",
-    "knex": "^0.19.5",
+    "knex": "^0.20.8",
     "lobibox": "^1.2.7",
     "moment": "^2.22.2",
     "popper": "^1.0.1",
     "popper.js": "^1.14.4",
-    "sqlite3": "^4.0.3"
+    "sqlite3": "^4.1.1"
   },
   "devDependencies": {
-    "electron": "^3.0.6",
-    "electron-packager": "^12.2.0",
-    "electron-rebuild": "^1.8.2"
+    "electron": "^7.1.11",
+    "electron-builder": "^22.3.2"
   }
 }
