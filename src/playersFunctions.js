@@ -50,11 +50,13 @@ function bindTableButtons(){
         },
         callback: function(result){
           if(result){
-            knex('players').where('id', id).del().then(function(){
-              getPlayers()
-              Lobibox.notify('error', {
-                msg: 'Speler werd verwijderd.',
-                sound: 'sound3'  });
+            knex('games').where('whitePlayerId', id).orWhere('blackPlayerId',id).del().then(function(){
+              knex('players').where('id', id).del().then(function(){
+                getPlayers()
+                Lobibox.notify('error', {
+                  msg: 'Speler werd verwijderd.',
+                  sound: 'sound3'  });
+              })
             })
           }
         }
