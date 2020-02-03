@@ -46,7 +46,7 @@ $(document).ready(function() {
   })
 
   $('#addPlayer').click(function(){
-    createBootBoxSpeler(selection)
+    createBootBoxPlayer(selection)
   })
 
   getGames()
@@ -54,10 +54,10 @@ $(document).ready(function() {
 
   $('#newPairing').click(function(){
     if(selection.getValue(true).length > 0){
-      knex('tornooien').select('id').where('active',1).first().then(function(id){
-        Tornooi.create(id.id, knex).then(function(tornooi){
-          let spelerArray = SJCEngine.sortSpelers(selection.getValue(true), tornooi)
-          SJCEngine.executeParing(spelerArray, tornooi)
+      knex('tournaments').select('id').where('active',1).first().then(function(id){
+        Tournament.create(id.id, knex).then(function(tournament){
+          let playerArray = SJCEngine.sortPlayers(selection.getValue(true), tournament)
+          SJCEngine.executePairing(playerArray, tournament)
           Lobibox.notify('success', {
             msg: 'Paring uitgevoerd.',
             sound: 'sound7'  });

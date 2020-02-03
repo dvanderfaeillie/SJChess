@@ -81,7 +81,7 @@ function bootOkObject(id){
     } else {
       qry = knex.from(knex.raw('?? (??, ??, ??, ??)', ['players', 'tournamentId', 'name', 'surname', 'sex']))
                     .insert(function(){
-                      this.from('tornooien')
+                      this.from('tournaments')
                           .where('active',1)
                           .select('id',knex.raw('?, ?, ?', [name, surname, sex]))
                     })

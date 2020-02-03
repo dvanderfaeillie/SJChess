@@ -8,6 +8,7 @@ const knex = require("knex")({
 })
 
 const moment = require('moment')
+const bootstrap = require('bootstrap')
 const bootbox = require('bootbox')
 const $ = require('jquery')
 

@@ -141,7 +141,7 @@ function updateGame(gameId){
     str += '<div class=\'form-group\'>'
       for(let i = 0; i < 4; i++){
         str += '<div class=\'form-check abc-radio abc-radio-primary\'>'
-          str += '<input class=\'form-check-input\' type=\'radio\' value=\''+i+'\' id=\''+i+'\' name=\'resultaat\''
+          str += '<input class=\'form-check-input\' type=\'radio\' value=\''+i+'\' id=\''+i+'\' name=\'result\''
           str += result === i ? 'checked=\'\' ' : ''
           str += '>'
           str += '<label class=\'form-check-label\' for=\''+i+'\'>'+formatResult(i, true)+'</label>'
@@ -202,7 +202,7 @@ function formatResult(result, fullFlag = false){
 
 
 
-function createBootBoxSpeler(selection){
+function createBootBoxPlayer(selection){
   let str = ''
   str += '<form role="form">'
   str += '<div class=\'form-group\'>'
