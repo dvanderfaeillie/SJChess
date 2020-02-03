@@ -1,7 +1,7 @@
 {
   "name": "sjchess",
   "productName": "SJChess tournament manager",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "SJCchess tournament manager",
   "author": "Dieter Vanderfaeillie",
   "license": "GPL-3.0",
@@ -17,9 +17,12 @@
     "appId": "com.sjchess.app",
     "productName": "SJChess",
     "linux": {
-      "target": [
-        "AppImage"
-      ]
+      "target": ["AppImage"],
+      "category": "Game"
+    },
+    "win":{
+      "target": ["portable"],
+      "icon" : "build/icon.ico"
     }
   },
   "dependencies": {
