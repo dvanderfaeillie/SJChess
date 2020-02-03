@@ -1,12 +1,12 @@
 const { app, BrowserWindow, ipcMain, Menu, Dialog} = require("electron")
 const path = require('path')
 
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'development'
 
 app.on('ready', () => {
 	// Initializing the database file
 	const fs = require('fs')
-	const file = './src/test.db'
+	const file = './src/database.db'
 	try {
 	  if (!fs.existsSync(file)) {
 			const sqlite3 = require('sqlite3')

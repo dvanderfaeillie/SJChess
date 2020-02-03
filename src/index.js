@@ -1,15 +1,13 @@
-const path = require('path')
 const knex = require("knex")({
   client: 'sqlite3',
   connection: {
-    filename: 'src/database.db'
+    filename: './src/database.db'
   },
   useNullAsDefault: false,
   debug: true
 })
 
 const moment = require('moment')
-const bootstrap = require('bootstrap')
 const bootbox = require('bootbox')
 const $ = require('jquery')
 
@@ -38,23 +36,23 @@ $(document).ready(function () {
     })
 
     tornooiId.passedElement.addEventListener('change', function(event) {
-      knex('tornooien').where('id','=',event.detail.value).update({active: true}).then(function(){
+      knex('tournaments').where('id','=',event.detail.value).update({active: true}).then(function(){
         Lobibox.notify('success', {
           msg: 'Het gebruikte tornooi werd gewijzigd.',
           sound: 'sound7' });
       })
-      knex('tornooien').where('id','!=',event.detail.value).update({active: false}).then()
+      knex('tournaments').where('id','!=',event.detail.value).update({active: false}).then()
     })
 
     getSelect()
     function getSelect(){
       var choicesArray = []
-      let qry = knex.select('id','active','naam').from('tornooien').orderBy('datum', 'desc')
+      let qry = knex.select('id','active','name').from('tournaments').orderBy('date', 'desc')
       qry.then(function(result){
         for(var i = 0; i < result.length ; i++){
           choicesArray.push({
             value: result[i].id,
-            label: result[i].naam,
+            label: result[i].name,
             selected: result[i].active === 1
           })
         }
@@ -62,15 +60,15 @@ $(document).ready(function () {
       })
     }
 
-    $('#addTornooi').click(function(){
-      let naamEl = $('input[name="naam"]');
-      if(naamEl.val() !== ''){
-        knex('tornooien').insert({naam: naamEl.val(),
-                                  datum: moment().format('YYYY-MM-DD'),
+    $('#addTournament').click(function(){
+      let namelElement = $('input[name="name"]');
+      if(namelElement.val() !== ''){
+        knex('tournaments').insert({name: namelElement.val(),
+                                  date: moment().format('YYYY-MM-DD'),
                                   active: 0})
                          .then(function(){
                            getSelect()
-                           naamEl.val('')
+                           namelElement.val('')
                            Lobibox.notify('success', {
                              msg: 'Nieuw tornooi toegevoegd.',
                              sound: 'sound7'  })
@@ -78,7 +76,7 @@ $(document).ready(function () {
       }
     })
 
-    $('#deleteTornooi').click(function(){
+    $('#deleteTournament').click(function(){
       bootbox.confirm({
         message: 'Ben je zeker?',
         buttons: {
@@ -94,10 +92,10 @@ $(document).ready(function () {
         callback: function(result){
           if(result){
             let id = $('select').val()
-            knex('tornooien').where('id', id).del().then(function(){
-              knex('tornooien').orderBy('datum','desc').limit(1).pluck('id').then(function(r){
+            knex('tournaments').where('id', id).del().then(function(){
+              knex('tournaments').orderBy('date','desc').limit(1).pluck('id').then(function(r){
                 id = r[0]
-                knex('tornooien').where('id','=',id).update({'active': true}).then(function(){
+                knex('tournaments').where('id','=',id).update({'active': true}).then(function(){
                   getSelect()
                   Lobibox.notify('error', {
                     msg: 'Tornooi werd verwijderd.',

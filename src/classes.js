@@ -1,131 +1,131 @@
 /** Class die een speler voorstelt. */
-class Speler {
-  constructor(id, voornaam, naam, geslacht){
+class Player {
+  constructor(id, surname, name, sex){
     this.id = id
-    this.naam = naam
-    this.voornaam = voornaam
-    this.geslacht = geslacht
+    this.name = name
+    this.surname = surname
+    this.sex = sex
   }
 
   static create(id, knex) {
-    return knex('spelers').where({id: id})
-             .select('voornaam','naam','geslacht')
+    return knex('players').where({id: id})
+             .select('surname','name','sex')
              .first().then(function(r){
-                return new Speler(id, r.voornaam, r.naam, r.geslacht)
+                return new Player(id, r.surname, r.name, r.sex)
               })
   }
 }
 
-/** Class die een partij voorstelt. */
-class Partij {
-  constructor(id, witSpelerId, zwartSpelerId, resultaat, datum){
+/** Class which represents a game. */
+class Game {
+  constructor(id, whitePlayerId, blackPlayerId, result, date){
     this.id = id
-    this.witSpelerId = witSpelerId
-    this.zwartSpelerId = zwartSpelerId
-    this.resultaat = resultaat
-    this.datum = datum
-    this.bye = typeof zwartSpelerId === 'undefined'
+    this.whitePlayerId = whitePlayerId
+    this.blackPlayerId = blackPlayerId
+    this.result = result
+    this.date = date
+    this.bye = typeof blackPlayerId === 'undefined'
   }
 
-  getScore(spelerId){
+  getScore(playerId){
     let score = 0
-    if(this.witSpelerId === spelerId){
-      score += this.resultaat === 2 ? 0.5 : 0
-      score += this.resultaat === 1 ? 1 : 0
-    } else if (this.zwartSpelerId === spelerId){
-      score += this.resultaat === 2 ? 0.5 : 0
-      score += this.resultaat === 3 ? 1 : 0
+    if(this.whitePlayerId === playerId){
+      score += this.result === 2 ? 0.5 : 0
+      score += this.result === 1 ? 1 : 0
+    } else if (this.blackPlayerId === playerId){
+      score += this.result === 2 ? 0.5 : 0
+      score += this.result === 3 ? 1 : 0
     }
     return score
   }
 
   static create(id, knex) {
-    return knex('partijen').where({id: id})
-             .select('witSpelerId','zwartSpelerId','resultaat','datum')
+    return knex('games').where({id: id})
+             .select('whitePlayerId','blackPlayerId','result','date')
              .first().then(function(r){
-                return new Partij(id, r.witSpelerId, r.zwartSpelerId, r.resultaat, r.datum)
+                return new Game(id, r.whitePlayerId, r.blackPlayerId, r.result, r.date)
               })
   }
 } //end class
 
 /** Class die een tornooi voorstelt. */
-class Tornooi {
-  constructor(id, naam, datum, partijen){
+class Tournament {
+  constructor(id, name, date, games){
     this.id = id
-    this.naam = naam
-    this.datum = datum
-    this.partijen = partijen
+    this.name = name
+    this.date = date
+    this.games = games
   }
 
-  getScore(spelerId){
+  getScore(playerId){
     let score = 0
-    this.partijen.forEach(function(partij){
-      score += partij.getScore(spelerId)
+    this.games.forEach(function(game){
+      score += game.getScore(playerId)
     })
     return score
   }
 
-  getSpelerIds(){
-    let spelers = []
-    this.partijen.forEach(function(partij){
-      if(spelers.indexOf(partij.witSpelerId) === -1){
-        spelers.push(partij.witSpelerId)
+  getPlayerIds(){
+    let players = []
+    this.games.forEach(function(game){
+      if(players.indexOf(game.whitePlayerId) === -1){
+        players.push(game.whitePlayerId)
       }
-      if(typeof partij.zwartSpelerId !== 'undefine' && spelers.indexOf(partij.zwartSpelerId) === -1){
-        spelers.push(partij.zwartSpelerId)
+      if(typeof game.blackPlayerId !== 'undefine' && players.indexOf(partij.blackPlayerId) === -1){
+        players.push(game.blackPlayerId)
       }
     })
-    return spelers
+    return players
   }
 
-  getAantalPartijen(spelerId){
-    let aantal = 0
-    this.partijen.forEach(function(partij){
-      aantal += partij.witSpelerId === spelerId || partij.zwartSpelerId === spelerId
+  getNumberOfGames(playerId){
+    let count = 0
+    this.games.forEach(function(game){
+      count += game.whitePlayerId === playerId || game.blackPlayerId === playerId
     })
-    return aantal
+    return count
   }
 
-  getAantalWitPartijen(spelerId){
-    let aantal = 0
-    this.partijen.forEach(function(partij){
-      aantal += partij.witSpelerId === spelerId
+  getNumberOfWhiteGames(playerId){
+    let count = 0
+    this.games.forEach(function(game){
+      count += game.whitePlayerId === playerId
     })
-    return aantal
+    return count
   }
 
-  reedsGespeeld(spelerId1, spelerId2){
+  alreadyPlayed(playerId1, playerId2){
     let flag = false
-    this.partijen.forEach(function(partij){
-      flag += (partij.witSpelerId === spelerId1 && partij.zwartSpelerId === spelerId2) ||
-                (partij.witSpelerId === spelerId2 && partij.zwartSpelerId === spelerId1)
+    this.games.forEach(function(game){
+      flag += (game.whitePlayerId === playerId1 && game.blackPlayerId === playerId2) ||
+                (game.whitePlayerId === playerId2 && game.blackPlayerId === playerId1)
     })
     return flag
   }
 
   static create (id, knex) {
-    function getPartijen (id){
-      let partijen = []
-      return knex('partijen').join('spelers','spelers.id','partijen.witSpelerId')
-                     .join('tornooien','spelers.tornooiId','tornooien.id')
-                     .where('tornooien.id',id)
-                     .select('partijen.id')
+    function getGames (id){
+      let games = []
+      return knex('games').join('players','players.id','games.whitePlayerId')
+                     .join('tournaments','players.tournamentId','tournaments.id')
+                     .where('tournaments.id',id)
+                     .select('games.id')
                      .then(function(result){
                        result.forEach(function(row){
-                         Partij.create(row.id, knex).then(function(r){
-                           partijen.push(r)
+                         Game.create(row.id, knex).then(function(r){
+                           games.push(r)
                          })
                        })
-                       return partijen
+                       return games
                      })
     } //end function
 
-    return getPartijen(id).then(function(partijen){
-      return knex('tornooien').select('naam','datum')
+    return getGames(id).then(function(games){
+      return knex('tournaments').select('name','date')
         .where('id',id)
         .first()
         .then(function(r){
-          return new Tornooi(id, r.naam, r.datum, partijen)
+          return new Tournament(id, r.name, r.date, games)
         })
     })
   } // end static create
@@ -133,7 +133,7 @@ class Tornooi {
 
 
 class SJCEngine {
-  static sortSpelers(beschikbareSpelers, tornooi){
+  static sortPlayers(availablePlayers, tournament){
     function compare(a, b) {
       let comparison = 0
       if (a.score > b.score) {
@@ -141,9 +141,9 @@ class SJCEngine {
       } else if (a.score < b.score) {
         comparison = 1
       } else { // if sortField is equal
-        if(a.aantal < b.aantal){
+        if(a.count < b.count){
           comparison = -1
-        } else if (a.aantal > b.aantal) {
+        } else if (a.count > b.count) {
           comparison = 1
         }
       }
@@ -151,54 +151,54 @@ class SJCEngine {
     }
 
     /* Sorting the available players on their score */
-    let spelerArray = []
-    beschikbareSpelers.forEach(function(spelerId){
+    let playerArray = []
+    availablePlayers.forEach(function(playerId){
       //flag = true
       //if(flag){
-        spelerArray.push({
-          id: spelerId,
-          score: tornooi.getScore(spelerId),
-          aantal: tornooi.getAantalPartijen(spelerId),
-          aantalWit: tornooi.getAantalWitPartijen(spelerId),
-          sortField: tornooi.getAantalPartijen(spelerId) !== 0 ? tornooi.getScore(spelerId)/tornooi.getAantalPartijen(spelerId) : 0
+        playerArray.push({
+          id: playerId,
+          score: tournament.getScore(playerId),
+          count: tournament.getNumberOfGames(playerId),
+          countWhite: tournament.getNumberOfWhiteGames(playerId),
+          sortField: tournament.getNumberOfGames(playerId) !== 0 ? tournament.getScore(playerId)/tournament.getNumberOfGames(playerId) : 0
         })
       //}
     })
-    spelerArray.sort(compare)
+    playerArray.sort(compare)
 
-    return spelerArray
+    return playerArray
   }
 
-  static executeParing(spelerArray, tornooi){
-    for(let i = 0; i < spelerArray.length; i++){
-      let speler1 = spelerArray[i]
+  static executePairing(playerArray, tournament){
+    for(let i = 0; i < playerArray.length; i++){
+      let player1 = playerArray[i]
       let t = i+1
-      let flagMatchGevonden = false
-      while(!flagMatchGevonden && t < spelerArray.length){
-        let speler2 = spelerArray[t]
-        flagMatchGevonden += !tornooi.reedsGespeeld(speler1.id, speler2.id)
-        if(flagMatchGevonden){ // Match gevonden
-          if(tornooi.getAantalWitPartijen(speler1.id) <= tornooi.getAantalWitPartijen(speler2.id)){
-            knex('partijen').insert({
-              witSpelerId: speler1.id,
-              zwartspelerId: speler2.id,
-              datum: moment().format('YYYY-MM-DD')
+      let flagFoundMatch = false
+      while(!flagFoundMatch && t < playerArray.length){
+        let player2 = playerArray[t]
+        flagFoundMatch += !tournament.alreadyPlayed(player1.id, player2.id)
+        if(flagFoundMatch){ // Match gevonden
+          if(tournament.getNumberOfWhiteGames(player1.id) <= tournament.getNumberOfWhiteGames(player2.id)){
+            knex('games').insert({
+              whitePlayerId: player1.id,
+              blackPlayerId: player2.id,
+              date: moment().format('YYYY-MM-DD')
             }).then()
           } else {
-            knex('partijen').insert({
-              witSpelerId: speler2.id,
-              zwartspelerId: speler1.id,
-              datum: moment().format('YYYY-MM-DD')
+            knex('games').insert({
+              whitePlayerId: player2.id,
+              blackPlayerId: player1.id,
+              date: moment().format('YYYY-MM-DD')
             }).then()
           }
-          spelerArray.splice(t,1)
-          spelerArray.splice(0,1)
+          playerArray.splice(t,1)
+          playerArray.splice(0,1)
           i--
         } else {
           t++
         }
       }
     } // endfor
-    getPartijen(true)
+    getGames(true)
   }
 }
