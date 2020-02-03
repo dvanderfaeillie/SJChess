@@ -17,7 +17,7 @@ $(document).ready(function() {
   Lobibox.notify.DEFAULTS = $.extend({}, Lobibox.notify.DEFAULTS, {
     iconSource: "fontAwesome",
     delay: 4000,
-    soundPath: '../node_modules/lobibox/dist/sounds/',
+    soundPath: 'sounds/',
     delayIndicator: false,
     size: 'mini',
     position: 'bottom center',

@@ -17,7 +17,7 @@ $(document).ready(function () {
   Lobibox.notify.DEFAULTS = $.extend({}, Lobibox.notify.DEFAULTS, {
     iconSource: "fontAwesome",
     delay: 4000,
-    soundPath: '../node_modules/lobibox/dist/sounds/',
+    soundPath: 'sounds/',
     delayIndicator: false,
     size: 'mini',
     position: 'bottom center',
@@ -41,7 +41,7 @@ $(document).ready(function () {
       knex('tournaments').where('id','=',event.detail.value).update({active: true}).then(function(){
         Lobibox.notify('success', {
           msg: 'Het gebruikte tornooi werd gewijzigd.',
-          sound: 'sound7' });
+          sound: 'sound7'});
       })
       knex('tournaments').where('id','!=',event.detail.value).update({active: false}).then()
     })
