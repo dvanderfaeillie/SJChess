@@ -53,15 +53,19 @@ $(document).ready(function() {
       .first()
       .then(function(id){
         getRankingExport(id.id).then(function(content){
-          let path = remote.dialog.showSaveDialog(remote.getCurrentWindow(), {title: 'Save file'})
-          if (typeof path !== 'undefined') {
-            fs.writeFile(path, content, function(err) {
-              if(err) {
-                  return console.log(err)
-              }
-            })
-          } // end if
-        }) // end then
+          remote.dialog.showSaveDialog(remote.getCurrentWindow(), {title: 'Save file'}).then(function(result){
+              let path = result.filePath
+              if (path !== '') {
+                fs.writeFile(path, content, function(err) {
+                  if(err) {
+                      return console.log(err)
+                  }
+                })
+              } // end if
+          })
+        }).catch(err => {
+          alert(err)
+        })
       })
   })
 })
