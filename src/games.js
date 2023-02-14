@@ -2,7 +2,7 @@ const path = require('path')
 const knex = require('knex')({
   client: 'sqlite3',
   connection: {
-    filename: path.join(require('electron').remote.getGlobal('sharedLocation').userDataPath,'sjchess.db')
+    filename: path.join(require('electron').remote.getGlobal('sharedLocation').userDataPath, 'sjchess.db')
   },
   useNullAsDefault: false,
   debug: false
@@ -25,9 +25,9 @@ $(document).ready(function() {
     continueDelayOnInactiveTab: false
   });
 
-  $('#adminx-shared').load('adminx-shared.html', function () {
+  $('#adminx-shared').load('adminx-shared.html', function() {
     $('#menuPartijen').addClass('active')
-    $('.sidebar-toggle').click(function(){
+    $('.sidebar-toggle').click(function() {
       $('.adminx-sidebar')[0].classList.toggle("in")
     })
   })
@@ -40,52 +40,55 @@ $(document).ready(function() {
     removeItemButton: true
   })
 
-  element.addEventListener('addItem',function(e){
-    $('#numberOfPlayers').html('('+element.length+')')
+  element.addEventListener('addItem', function() {
+    $('#numberOfPlayers').html('(' + element.length + ')')
   })
-  element.addEventListener('removeItem',function(e){
-    $('#numberOfPlayers').html('('+element.length+')')
+  element.addEventListener('removeItem', function() {
+    $('#numberOfPlayers').html('(' + element.length + ')')
   })
 
-  $('#addPlayer').click(function(){
+  $('#addPlayer').click(function() {
     createBootBoxPlayer(selection)
   })
 
   getGames()
   getGames(true)
 
-  $('#newPairing').click(function(){
-    if(selection.getValue(true).length > 0){
-      knex('tournaments').select('id').where('active',1).first().then(function(id){
-        Tournament.create(id.id, knex).then(function(tournament){
+  $('#newPairing').click(function() {
+    console.log(selection)
+    if (selection.getValue(true).length > 0) {
+      knex('tournaments').select('id').where('active', 1).first().then(function(id) {
+        Tournament.create(id.id, knex).then(function(tournament) {
           let playerArray = SJCEngine.sortPlayers(selection.getValue(true), tournament)
           SJCEngine.executePairing(playerArray, tournament)
           Lobibox.notify('success', {
             msg: 'Paring uitgevoerd.',
-            sound: 'sound7'  });
+            sound: 'sound7'
+          })
         })
       })
     } else {
       Lobibox.notify('error', {
         msg: 'Geen beschikbare spelers geselecteerd.',
-        sound: 'sound5'  });
+        sound: 'sound5'
+      });
     }
   })
 
   getSelect()
-  function getSelect(){
+  function getSelect() {
     var choicesArray = []
-    let qry = knex.select('players.id','players.name','players.surname')
-                  .from('players')
-                  .join('tournaments', 'players.tournamentId', 'tournaments.id')
-                  .where('tournaments.active',1)
-                  .orderBy('players.name','asc')
-    qry.then(function(result){
-      for(let i = 0; i < result.length ; i++){
+    let qry = knex.select('players.id', 'players.name', 'players.surname')
+      .from('players')
+      .join('tournaments', 'players.tournamentId', 'tournaments.id')
+      .where('tournaments.active', 1)
+      .orderBy('players.name', 'asc')
+    qry.then(function(result) {
+      for (let i = 0; i < result.length; i++) {
         choicesArray.push({
           value: result[i].id,
-          label: result[i].surname+' '+result[i].name,
-          selected: $.inArray(result[i].id,selection.getValue(true)) !== -1
+          label: result[i].surname + ' ' + result[i].name,
+          selected: $.inArray(result[i].id, selection.getValue(true)) !== -1
         })
       }
       selection.clearStore().setChoices(choicesArray, 'value', 'label', true)

@@ -1,7 +1,7 @@
 {
   "name": "sjchess",
   "productName": "SJChess tournament manager",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "SJCchess tournament manager",
   "author": "Dieter Vanderfaeillie",
   "license": "GPL-3.0",
@@ -17,25 +17,34 @@
     "appId": "com.sjchess.app",
     "productName": "SJChess",
     "linux": {
-      "target": ["AppImage", "snap"],
+      "target": [
+        "AppImage",
+        "snap"
+      ],
       "category": "Game"
     },
-    "win":{
-      "target": ["portable"],
-      "icon" : "build/icon.ico"
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "build/icon.ico"
     }
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
+    "@types/bootbox": "^5.2.4",
+    "@types/bootstrap": "^5.2.6",
+    "@types/jquery": "^3.5.16",
+    "@types/sqlite3": "^3.1.8",
     "adminx": "^1.0.0-alpha.6",
     "awesome-bootstrap-checkbox": "^1.0.1",
     "bootbox": "^4.4.0",
     "choices.js": "^9.0.1",
     "flatpickr": "^4.5.2",
-    "jquery": "^3.3.1",
+    "jquery": "^3.6.3",
     "knex": "^0.20.8",
     "lobibox": "^1.2.7",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "popper": "^1.0.1",
     "popper.js": "^1.14.4",
     "sqlite3": "^4.1.1"
