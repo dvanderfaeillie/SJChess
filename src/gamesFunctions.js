@@ -260,7 +260,7 @@ function createBootBoxPlayer(selection) {
               msg: 'Speler toegevoegd.',
               sound: 'sound7'
             });
-            selection.setChoices([{ value: id, label: surname + ' ' + name, selected: true }], 'value', 'label');
+            selection.setChoices([{ value: id[0], label: surname + ' ' + name, selected: true }], 'value', 'label');
           })
         }
       }

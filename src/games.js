@@ -55,7 +55,6 @@ $(document).ready(function() {
   getGames(true)
 
   $('#newPairing').click(function() {
-    console.log(selection)
     if (selection.getValue(true).length > 0) {
       knex('tournaments').select('id').where('active', 1).first().then(function(id) {
         Tournament.create(id.id, knex).then(function(tournament) {
