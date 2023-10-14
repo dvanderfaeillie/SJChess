@@ -164,6 +164,7 @@ class SJCEngine {
         })
       //}
     })
+    playerArray.sort(() => Math.random() - 0.5)
     playerArray.sort(compare)
 
     return playerArray
